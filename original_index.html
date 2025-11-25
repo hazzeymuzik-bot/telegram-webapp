@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Финансы — Телеграм WebApp</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body class="dark">
+  <div id="app" class="container">
+    <header>
+      <h1>Финансы — Персональная статистика</h1>
+      <div id="user-info">Инициализация...</div>
+    </header>
+    <nav class="tabs">
+      <button data-tab="expenses" class="active">Траты</button>
+      <button data-tab="income">Доходы</button>
+      <button data-tab="categories">Категории</button>
+      <button data-tab="charts">Графики</button>
+      <button data-tab="budget">Бюджет</button>
+      <button data-tab="settings">Настройки</button>
+    </nav>
+    <main>
+      <section id="expenses" class="tabpanel">
+        <h2>Добавить трату</h2>
+        <form id="expense-form" class="form-inline">
+          <input type="number" step="0.01" id="expense-amount" placeholder="Сумма" required>
+          <input type="date" id="expense-date" required>
+          <select id="expense-category"></select>
+          <input id="expense-note" placeholder="Комментарий">
+          <button type="submit">Добавить</button>
+        </form>
+        <h3>Последние траты</h3>
+        <div id="expenses-list"></div>
+      </section>
+      <section id="income" class="tabpanel" style="display:none;">
+        <h2>Добавить доход</h2>
+        <form id="income-form" class="form-inline">
+          <input type="number" step="0.01" id="income-amount" placeholder="Сумма" required>
+          <input type="date" id="income-date" required>
+          <select id="income-category"></select>
+          <input id="income-note" placeholder="Комментарий">
+          <button type="submit">Добавить</button>
+        </form>
+        <h3>Последние доходы</h3>
+        <div id="income-list"></div>
+      </section>
+      <section id="categories" class="tabpanel" style="display:none;">
+        <h2>Категории</h2>
+        <form id="category-form" class="form-inline">
+          <input id="category-name" placeholder="Название категории" required>
+          <input id="category-color" type="color" value="#00aaff">
+          <button type="submit">Добавить</button>
+        </form>
+        <div id="categories-list"></div>
+      </section>
+      <section id="charts" class="tabpanel" style="display:none;">
+        <h2>Графики</h2>
+        <div class="charts-grid">
+          <canvas id="chart-pie"></canvas>
+          <canvas id="chart-line"></canvas>
+        </div>
+      </section>
+      <section id="budget" class="tabpanel" style="display:none;">
+        <h2>Бюджет</h2>
+        <p id="budget-summary">Здесь будет сводка бюджета.</p>
+      </section>
+      <section id="settings" class="tabpanel" style="display:none;">
+        <h2>Настройки</h2>
+        <label><input type="checkbox" id="dark-toggle" checked> Тёмная тема</label>
+      </section>
+    </main>
+    <footer><small>finance-webapp-1.0</small></footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

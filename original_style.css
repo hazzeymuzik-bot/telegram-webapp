@@ -1,0 +1,14 @@
+:root{
+  --bg:#0f1720;
+  --card:#111827;
+  --muted:#9ca3af;
+  --accent:#60a5fa;
+  --text:#e5e7eb;
+}
+body{font-family:Inter, system-ui, Arial; background:var(--bg); color:var(--text); margin:0}
+.container{max-width:980px;margin:24px auto;padding:18px}
+header{display:flex;justify-content:space-between;align-items:center}
+.tabs{display:flex;gap:8px;margin:12px 0}
+.tabs button{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:8px;color:var(--text);cursor:pointer}
+.tabs button.active{background:rgba(96,165,250,0.12)}
+.tabpanel{background:var(--card);padding:14px;border-radius:12px}
