@@ -1,102 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Финансовый помощник — WebApp</title>
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Telegram WebApp JS -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Финансы — Телеграм WebApp</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 </head>
-<body>
-    <div class="container">
-        <header class="header">
-            <h1>💰 Финансовый помощник</h1>
-            <p class="subtitle">Учёт продаж битов — WebApp для Telegram</p>
-        </header>
-
-        <nav class="tab-navigation" role="tablist" aria-label="Навигация">
-            <button class="tab-button active" data-target="add">➕ Добавить</button>
-            <button class="tab-button" data-target="stats">📊 Статистика</button>
-            <button class="tab-button" data-target="ai">🤖 AI Анализ</button>
-        </nav>
-
-        <!-- Add -->
-        <section id="add" class="tab-content active" role="tabpanel">
-            <form id="purchaseForm" class="form">
-                <div class="form-row">
-                    <label for="amount">Сумма (₽)</label>
-                    <input id="amount" type="number" step="0.01" min="0" required value="5000" />
-                </div>
-
-                <div class="form-row">
-                    <label for="beatName">Название бита</label>
-                    <input id="beatName" type="text" required value="Dark Trap Beat" />
-                </div>
-
-                <div class="form-row">
-                    <label for="clientName">Имя клиента</label>
-                    <input id="clientName" type="text" required value="Иван Иванов" />
-                </div>
-
-                <div class="form-row">
-                    <label for="clientUsername">Никнейм в Telegram</label>
-                    <input id="clientUsername" type="text" value="@ivan_rapper" />
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" id="saveBtn">Сохранить</button>
-                    <button type="button" id="exportCsv">Экспорт CSV</button>
-                </div>
-            </form>
-
-            <div class="recent">
-                <h3>Последние продажи</h3>
-                <ul id="recentList" class="recent-list"></ul>
-            </div>
-        </section>
-
-        <!-- Stats -->
-        <section id="stats" class="tab-content" role="tabpanel" aria-hidden="true">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalIncome">0 ₽</div>
-                    <div class="stat-label">Общий доход</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalSales">0</div>
-                    <div class="stat-label">Продажи</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="avgCheck">0 ₽</div>
-                    <div class="stat-label">Средний чек</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="beatsSold">0</div>
-                    <div class="stat-label">Битов продано</div>
-                </div>
-            </div>
-
-            <div class="chart-wrap">
-                <canvas id="incomeChart" width="400" height="220"></canvas>
-            </div>
-        </section>
-
-        <!-- AI -->
-        <section id="ai" class="tab-content" role="tabpanel" aria-hidden="true">
-            <h3>Прогноз дохода</h3>
-            <p id="aiText">AI-анализ доступен в продакшн-версии. Здесь демо-прогноз на основе текущих данных.</p>
-            <div class="ai-result" id="aiResult">—</div>
-            <div style="margin-top:12px;">
-                <button id="sendSummary">Отправить отчет в чат</button>
-            </div>
-        </section>
-    </div>
-
-    <script src="script.js"></script>
+<body class="dark">
+  <div id="app" class="container">
+    <header>
+      <h1>Финансы — Персональная статистика</h1>
+      <div id="user-info">Инициализация...</div>
+    </header>
+    <nav class="tabs">
+      <button data-tab="expenses" class="active">Траты</button>
+      <button data-tab="income">Доходы</button>
+      <button data-tab="categories">Категории</button>
+      <button data-tab="charts">Графики</button>
+      <button data-tab="budget">Бюджет</button>
+      <button data-tab="settings">Настройки</button>
+    </nav>
+    <main>
+      <section id="expenses" class="tabpanel">
+        <h2>Добавить трату</h2>
+        <form id="expense-form" class="form-inline">
+          <input type="number" step="0.01" id="expense-amount" placeholder="Сумма" required>
+          <input type="date" id="expense-date" required>
+          <select id="expense-category"></select>
+          <input id="expense-note" placeholder="Комментарий">
+          <button type="submit">Добавить</button>
+        </form>
+        <h3>Последние траты</h3>
+        <div id="expenses-list"></div>
+      </section>
+      <section id="income" class="tabpanel" style="display:none;">
+        <h2>Добавить доход</h2>
+        <form id="income-form" class="form-inline">
+          <input type="number" step="0.01" id="income-amount" placeholder="Сумма" required>
+          <input type="date" id="income-date" required>
+          <select id="income-category"></select>
+          <input id="income-note" placeholder="Комментарий">
+          <button type="submit">Добавить</button>
+        </form>
+        <h3>Последние доходы</h3>
+        <div id="income-list"></div>
+      </section>
+      <section id="categories" class="tabpanel" style="display:none;">
+        <h2>Категории</h2>
+        <form id="category-form" class="form-inline">
+          <input id="category-name" placeholder="Название категории" required>
+          <input id="category-color" type="color" value="#00aaff">
+          <button type="submit">Добавить</button>
+        </form>
+        <div id="categories-list"></div>
+      </section>
+      <section id="charts" class="tabpanel" style="display:none;">
+        <h2>Графики</h2>
+        <div class="charts-grid">
+          <canvas id="chart-pie"></canvas>
+          <canvas id="chart-line"></canvas>
+        </div>
+      </section>
+      <section id="budget" class="tabpanel" style="display:none;">
+        <h2>Бюджет</h2>
+        <p id="budget-summary">Здесь будет сводка бюджета.</p>
+      </section>
+      <section id="settings" class="tabpanel" style="display:none;">
+        <h2>Настройки</h2>
+        <label><input type="checkbox" id="dark-toggle" checked> Тёмная тема</label>
+      </section>
+    </main>
+    <footer><small>finance-webapp-1.0</small></footer>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
